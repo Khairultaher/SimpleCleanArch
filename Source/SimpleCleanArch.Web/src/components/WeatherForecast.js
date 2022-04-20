@@ -1,21 +1,28 @@
 import React, { Component, Fragment, useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
 
+import AddWeatherForecast from "./AddWeatherForecast";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
 
-import { getAllForcast } from "../redux/actions/weatherForcastActions";
+import {
+  getAllForcast,
+  clearErrors,
+} from "../redux/actions/weatherForcastActions";
 
 import Loader from "./layout/Loader";
 
 const WeatherForecast = ({}) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [resPerPage, setResPerPage] = useState(10);
+  const [itemPerPage, setItemPerPage] = useState(10);
+  const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState(null);
 
   const alert = useAlert();
   const dispatch = useDispatch();
 
-  const { loading, forecasts, error, count } = useSelector(
+  const { loading, forecasts, error, totalCount } = useSelector(
     (state) => state.allForcast
   );
 
@@ -24,13 +31,19 @@ const WeatherForecast = ({}) => {
       return alert.error(error);
     }
 
-    dispatch(getAllForcast(currentPage, resPerPage));
+    dispatch(getAllForcast(currentPage, itemPerPage));
   }, [dispatch, currentPage, alert, error]);
 
   function setCurrentPageNo(pageNumber) {
     setCurrentPage(pageNumber);
   }
-
+  function showModalDialog(param) {
+    setData(param);
+    setShowModal(true);
+  }
+  function onCloseModal() {
+    setShowModal(!showModal);
+  }
   return (
     <>
       <section className="container-fluid">
@@ -57,6 +70,21 @@ const WeatherForecast = ({}) => {
               <Loader />
             ) : (
               <Fragment>
+                <div class="row float-right">
+                  <button
+                    type="button"
+                    data-toggle="modal"
+                    data-target="#myModal"
+                    className="btn btn-success btn-sm my-1 mx-2 px-3 float-right"
+                    onClick={() => {
+                      showModalDialog(null);
+                    }}
+                  >
+                    <i className="fas fa-plus"></i> Add
+                  </button>
+                </div>
+                <br></br>
+
                 <section id="content">
                   <table
                     className="table table-striped"
@@ -73,15 +101,20 @@ const WeatherForecast = ({}) => {
                     </thead>
                     <tbody>
                       {forecasts.map((forecast) => (
-                        <tr key={forecast.date}>
+                        <tr key={forecast.id}>
                           <td>{forecast.date}</td>
                           <td>{forecast.temperatureC}</td>
                           <td>{forecast.temperatureF}</td>
                           <td>{forecast.summary}</td>
                           <td>
                             <div className="d-flex justify-content-start">
-                              <a className="btn mr-1">
-                                <i className="fas fa-edit text-warning"></i>
+                              <a
+                                className="btn mr-1"
+                                onClick={() => {
+                                  showModalDialog(forecast);
+                                }}
+                              >
+                                <i className="fas fa-edit text-success"></i>
                               </a>
                               <a className="btn">
                                 <i className="fas fa-trash-alt text-danger"></i>
@@ -93,14 +126,13 @@ const WeatherForecast = ({}) => {
                     </tbody>
                   </table>
                 </section>
-
                 <section id="paggination">
-                  {resPerPage <= count && (
+                  {itemPerPage <= totalCount && (
                     <div className="d-flex justify-content-center mt-5">
                       <Pagination
                         activePage={currentPage}
-                        itemsCountPerPage={resPerPage}
-                        totalItemsCount={count}
+                        itemsCountPerPage={itemPerPage}
+                        totalItemsCount={totalCount}
                         onChange={setCurrentPageNo}
                         nextPageText={"Next"}
                         prevPageText={"Prev"}
@@ -111,6 +143,13 @@ const WeatherForecast = ({}) => {
                       />
                     </div>
                   )}
+                </section>
+                <section id="modal">
+                  <AddWeatherForecast
+                    show={showModal}
+                    data={data}
+                    onCloseModalClick={onCloseModal}
+                  ></AddWeatherForecast>
                 </section>
               </Fragment>
             )}

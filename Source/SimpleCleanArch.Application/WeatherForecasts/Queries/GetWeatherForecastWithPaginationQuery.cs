@@ -4,11 +4,6 @@ using MediatR;
 using SimpleCleanArch.Application.Common.Interfaces;
 using SimpleCleanArch.Application.Common.Mappings;
 using SimpleCleanArch.Application.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimpleCleanArch.Application.WeatherForecasts.Queries
 {

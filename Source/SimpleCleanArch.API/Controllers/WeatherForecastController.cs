@@ -19,10 +19,19 @@ namespace SimpleCleanArch.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetWeatherForecas")]
+        [Route("GetWeatherForecast")]
         public async Task<ActionResult<PaginatedList<WeatherForecastModel>>> GetWeatherForecastWithPagination([FromQuery] GetWeatherForecastWithPaginationQuery query)
         {
-            return await Mediator.Send(query);
+            try
+            {
+                //await Task.Delay(5000);
+                return await Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         [HttpGet]
