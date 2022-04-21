@@ -17,13 +17,9 @@ export const getAllForcast =
     try {
       dispatch({ type: GET_ALL_FORCAST_REQUEST });
 
-      const baseUrl = config.API_BASE_URL;
-      console.log(baseUrl);
-      let link = `${baseUrl}/api/weatherforecast/GetWeatherForecast?pageNumber=${pageNumber}&pageSize=${pageSize}`;
-      console.log(link);
+      let link = `${config.API_BASE_URL}/api/weatherforecast/GetWeatherForecast?pageNumber=${pageNumber}&pageSize=${pageSize}`;
 
       const { data } = await axios.get(link);
-      console.log(data);
 
       dispatch({
         type: GET_ALL_FORCAST_SUCCESS,
