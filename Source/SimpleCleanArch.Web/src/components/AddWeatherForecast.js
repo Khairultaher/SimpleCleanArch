@@ -18,23 +18,28 @@ import {
 import Loader from "./layout/Loader";
 
 const AddWeatherForecast = (props) => {
-  const [temperatureC, setTemperatureC] = useState("");
-  const [temperatureF, setTemperatureF] = useState("");
+  const [temperatureC, setTemperatureC] = useState(0);
   const [summary, setSummary] = useState("");
 
   const alert = useAlert();
+  const modalRef = useRef();
   const dispatch = useDispatch();
+  const { loading, error, success, id } = useSelector(
+    (state) => state.addForcast
+  );
 
   useEffect(() => {
     if (props.show) {
-      console.log(props.data);
       showModal();
     }
   });
 
-  const modalRef = useRef();
-
   const showModal = () => {
+    if (props.data) {
+      setTemperatureC(props.data.temperatureC);
+      setSummary(props.data.summary);
+    }
+
     const modalEle = modalRef.current;
     const bsModal = new Modal(modalEle, {
       backdrop: "static",
@@ -49,13 +54,24 @@ const AddWeatherForecast = (props) => {
     bsModal.hide();
     props.onCloseModalClick();
   };
+
+  const submitHandler = () => {
+    const formData = new FormData();
+    formData.set("id", props.data.id);
+    formData.set("temperatureC", temperatureC);
+    formData.set("summary", summary);
+
+    console.log(formData);
+    dispatch(addForcast(formData));
+  };
+
   return (
-    <div className="modal fade" ref={modalRef} tabIndex="-1">
+    <div className="modal" ref={modalRef} tabIndex="-1">
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="staticBackdropLabel">
-              Modal title
+              Add Weather Forecast
             </h5>
             <button
               type="button"
@@ -67,18 +83,52 @@ const AddWeatherForecast = (props) => {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div className="modal-body">...</div>
+          <div className="modal-body">
+            <form className="">
+              <div className="form-group">
+                <label htmlFor="tempc" className="col-form-label">
+                  Temp. (C):
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="tempc"
+                  value={temperatureC}
+                  onChange={(e) => setTemperatureC(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="summary" className="col-form-label">
+                  Summary:
+                </label>
+                <textarea
+                  className="form-control"
+                  id="summary"
+                  value={summary}
+                  onChange={(e) => setSummary(e.target.value)}
+                />
+              </div>
+            </form>
+          </div>
           <div className="modal-footer">
             <button
               type="button"
               className="btn btn-secondary"
               onClick={hideModal}
               data-dismiss="modal"
+              disabled={loading ? true : false}
             >
               Close
             </button>
-            <button type="button" className="btn btn-primary">
-              Understood
+            <button
+              type="button"
+              className="btn btn-primary"
+              disabled={loading ? true : false}
+              onClick={submitHandler}
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              Save
             </button>
           </div>
         </div>

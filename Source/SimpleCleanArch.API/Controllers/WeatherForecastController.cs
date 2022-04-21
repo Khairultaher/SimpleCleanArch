@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using SimpleCleanArch.Application.Common.Extensions;
 using SimpleCleanArch.Application.Common.Models;
+using SimpleCleanArch.Application.WeatherForecasts.Commands;
 using SimpleCleanArch.Application.WeatherForecasts.Queries;
 
 namespace SimpleCleanArch.API.Controllers
@@ -20,21 +22,6 @@ namespace SimpleCleanArch.API.Controllers
 
         [HttpGet]
         [Route("GetWeatherForecast")]
-        public async Task<ActionResult<PaginatedList<WeatherForecastModel>>> GetWeatherForecastWithPagination([FromQuery] GetWeatherForecastWithPaginationQuery query)
-        {
-            try
-            {
-                //await Task.Delay(5000);
-                return await Mediator.Send(query);
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
-
-        [HttpGet]
         public async Task<IActionResult> Get(int skip = 1, int take = 10)
         {
             try
@@ -57,6 +44,66 @@ namespace SimpleCleanArch.API.Controllers
             {
                 var res = new { message = ex.Message };
                 return BadRequest(res);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PaginatedList<WeatherForecastModel>>> GetWeatherForecastWithPagination([FromQuery] GetWeatherForecastWithPaginationQuery query)
+        {
+            try
+            {
+                return await Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.GetExceptions());
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<int>> Create([FromForm] CreateWeatherForecastCommand command)
+        {
+            try
+            {
+                return await Mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.GetExceptions());
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> Update([FromForm] UpdateWeatherForecastCommand command)
+        {
+            try
+            {
+                await Mediator.Send(command);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.GetExceptions());
+            }
+        }
+
+
+
+        //[HttpDelete("{id}")]
+        [HttpDelete]
+        public async Task<ActionResult> Delete([FromQuery] int id)
+        {
+            try
+            {
+                await Mediator.Send(new DeleteWeatherForecastCommand { Id = id });
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.GetExceptions());
             }
         }
     }

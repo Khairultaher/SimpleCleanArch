@@ -4,7 +4,14 @@ import {
   GET_ALL_FORCAST_FAIL,
   ADD_FORCAST_REQUEST,
   ADD_FORCAST_SUCCESS,
+  ADD_FORCAST_RESET,
   ADD_FORCAST_FAIL,
+  EDIT_FORCAST_REQUEST,
+  EDIT_FORCAST_SUCCESS,
+  EDIT_FORCAST_FAIL,
+  DELETE_FORCAST_REQUEST,
+  DELETE_FORCAST_SUCCESS,
+  DELETE_FORCAST_FAIL,
   CLEAR_ERRORS,
 } from "../constants/weatherForcastConstants";
 
@@ -52,10 +59,77 @@ export const addForcastReducer = (state = { forecast: {} }, action) => {
     case ADD_FORCAST_SUCCESS:
       return {
         loading: false,
+        success: true,
+        id: action.payload,
+      };
+    case ADD_FORCAST_RESET:
+      return {
+        ...state,
+        success: false,
+      };
+    case ADD_FORCAST_FAIL:
+      return {
+        ...state,
+        error: action.payload.message,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const editForcastReducer = (state = { forecast: {} }, action) => {
+  switch (action.type) {
+    case EDIT_FORCAST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case EDIT_FORCAST_SUCCESS:
+      return {
+        loading: false,
         success: action.payload.message,
       };
 
-    case ADD_FORCAST_FAIL:
+    case EDIT_FORCAST_FAIL:
+      return {
+        ...state,
+        error: action.payload.message,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const deleteForcastReducer = (state = { forecast: {} }, action) => {
+  switch (action.type) {
+    case DELETE_FORCAST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case DELETE_FORCAST_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.message,
+      };
+
+    case DELETE_FORCAST_FAIL:
       return {
         ...state,
         error: action.payload.message,

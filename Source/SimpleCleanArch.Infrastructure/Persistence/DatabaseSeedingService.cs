@@ -30,11 +30,6 @@ public class DatabaseSeedingService : IHostedService
         var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
         var roleManager = scope.ServiceProvider.GetService<RoleManager<ApplicationRole>>();
 
-        if (context.Database.IsSqlServer())
-        {
-            //await context.Database.MigrateAsync(cancellationToken);
-        }
-
         await SeedInitialData(context, userManager, roleManager, cancellationToken);
     }
 
