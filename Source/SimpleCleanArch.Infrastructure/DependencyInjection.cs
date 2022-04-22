@@ -10,6 +10,7 @@ using SimpleCleanArch.Application.Common.Interfaces;
 using SimpleCleanArch.Application.Common.Security;
 using SimpleCleanArch.Infrastructure.Identity;
 using SimpleCleanArch.Infrastructure.Persistence;
+using SimpleCleanArch.Infrastructure.Security;
 using SimpleCleanArch.Infrastructure.Services;
 using System.Text;
 
@@ -46,6 +47,8 @@ public static class DependencyInjection
             .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
         services.AddTransient<IIdentityService, IdentityService>();
+
+        services.AddTransient<IJwtTokenHelper, JwtTokenHelper>();
         //services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
 
         services.AddAuthentication().AddIdentityServerJwt();

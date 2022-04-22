@@ -1,19 +1,16 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using SimpleCleanArch.Application.Common.Interfaces;
 using SimpleCleanArch.Application.Common.Models;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace SimpleCleanArch.Application.Common.Security
+namespace SimpleCleanArch.Infrastructure.Security
 {
-    public class JwtTokenHelper
+    public class JwtTokenHelper : IJwtTokenHelper
     {
-        public static JwtToken GetJwtToken(string username, string signingKey, string issuer,
+        public JwtToken GetJwtToken(string username, string signingKey, string issuer,
                                                    string audience, TimeSpan expiration, Claim[] additionalClaims = null!)
         {
             var claims = new[]

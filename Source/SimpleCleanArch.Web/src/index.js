@@ -1,6 +1,6 @@
 import React, { StrictMode } from "react";
 //import { BrowserRouter } from 'react-router-dom';
-import ReactDOM from "react-dom";
+//import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 
 import { Provider } from "react-redux";

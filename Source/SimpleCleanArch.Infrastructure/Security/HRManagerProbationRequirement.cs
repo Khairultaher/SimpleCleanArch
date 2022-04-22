@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace SimpleCleanArch.Application.Common.Security
+namespace SimpleCleanArch.Infrastructure.Security
 {
     public class HRManagerProbationRequirement : IAuthorizationRequirement
     {
