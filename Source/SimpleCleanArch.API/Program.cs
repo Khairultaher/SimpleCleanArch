@@ -1,19 +1,29 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using SimpleCleanArch.API.Filters;
 using SimpleCleanArch.API.Services;
 using SimpleCleanArch.Application;
 using SimpleCleanArch.Application.Common;
+using SimpleCleanArch.Application.Common.Constants;
 using SimpleCleanArch.Infrastructure;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 #region Configuration
 builder.Configuration.AddJsonFile($"appsettings.json", false, true);
-//var env = builder.Configuration.GetSection("Environment").Value;
-//builder.Configuration.AddJsonFile($"appsettings.{env}.json", false, true);
-//IConfiguration configuration = new ConfigurationBuilder().AddJsonFile($"appsettings.{env}.json").Build();
+var env = builder.Configuration.GetSection("Environment").Value;
+builder.Configuration.AddJsonFile($"appsettings.{env}.json", false, true);
+//IConfiguration configuration = new ConfigurationBuilder().AddJsonFile($"appsettings.{env}.json").Build();                           .Build();
 IConfiguration configuration = builder.Configuration;
+#endregion
+
+#region Constants & Variables
+Constants.JwtToken.Issuer = configuration["JwtToken:Issuer"];
+Constants.JwtToken.Audience = configuration["JwtToken:Audience"];
+Constants.JwtToken.SigningKey = configuration["JwtToken:SigningKey"];
 #endregion
 
 // Add services to the container.
@@ -26,12 +36,13 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
-
-
-
-
+#region Configure Session
+//builder.Services.AddSession(options =>
+//{
+//    options.Cookie.HttpOnly = true;
+//    options.IdleTimeout = TimeSpan.FromHours(1);
+//});
+#endregion
 
 //services cors
 builder.Services.AddCors(p => p.AddPolicy("cors", builder =>
