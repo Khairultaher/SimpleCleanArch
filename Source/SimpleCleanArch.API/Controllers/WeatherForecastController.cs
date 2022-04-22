@@ -64,8 +64,8 @@ namespace SimpleCleanArch.API.Controllers
         public async Task<ActionResult<int>> Create([FromForm] CreateWeatherForecastCommand command)
         {
             try
-            {
-                return await Mediator.Send(command);
+            {          
+               return await Mediator.Send(command);
             }
             catch (Exception ex)
             {

@@ -1,10 +1,10 @@
-using SimpleCleanArch.Infrastructure;
+using FluentValidation.AspNetCore;
+using SimpleCleanArch.API.Filters;
+using SimpleCleanArch.API.Services;
 using SimpleCleanArch.Application;
 using SimpleCleanArch.Application.Common;
-using SimpleCleanArch.API.Services;
-using SimpleCleanArch.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Identity;
-using SimpleCleanArch.Infrastructure.Identity;
+using SimpleCleanArch.Infrastructure;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +20,9 @@ IConfiguration configuration = builder.Configuration;
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(configuration);
 builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+    options.Filters.Add<ApiExceptionFilterAttribute>())
+        .AddFluentValidation(x => x.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

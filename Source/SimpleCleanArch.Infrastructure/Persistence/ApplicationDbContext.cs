@@ -63,7 +63,6 @@ public class ApplicationDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        //builder.Entity<WeatherForecast>().ToTable("WeatherForecasts");
         base.OnModelCreating(builder);
     }
 
