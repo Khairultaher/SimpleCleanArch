@@ -21,11 +21,11 @@ import {
 export const getAllForcast =
   (pageNumber = 1, pageSize = 10) =>
   async (dispatch) => {
+    let link = `${config.API_BASE_URL}/api/weatherforecast?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    console.log(`getAllForcast: ${link}`);
     try {
       dispatch({ type: GET_ALL_FORCAST_REQUEST });
 
-      let link = `${config.API_BASE_URL}/api/weatherforecast?pageNumber=${pageNumber}&pageSize=${pageSize}`;
-      console.log(link);
       const { data } = await axios.get(link);
 
       dispatch({
@@ -41,8 +41,9 @@ export const getAllForcast =
     }
   };
 
-// Get all forecast
+// add forecast
 export const addForcast = (forecast) => async (dispatch) => {
+  let link = `${config.API_BASE_URL}/api/weatherforecast`;
   try {
     dispatch({ type: ADD_FORCAST_REQUEST });
 
@@ -52,19 +53,14 @@ export const addForcast = (forecast) => async (dispatch) => {
       },
     };
 
-    let link = `${config.API_BASE_URL}/api/weatherforecast`;
-    console.log(link);
-    const { data } = await axios.post(
-      `https://localhost:7148/api/weatherforecast`,
-      forecast,
-      config
-    );
+    const { data } = await axios.post(link, forecast, config);
     console.log(data);
     dispatch({
       type: ADD_FORCAST_SUCCESS,
       payload: data,
     });
   } catch (error) {
+    console.log(error);
     dispatch({
       type: ADD_FORCAST_FAIL,
       payload: error.response.data.message,
@@ -72,6 +68,32 @@ export const addForcast = (forecast) => async (dispatch) => {
   }
 };
 
+// add forecast
+export const editForcast = (forecast) => async (dispatch) => {
+  let link = `${config.API_BASE_URL}/api/weatherforecast`;
+  try {
+    dispatch({ type: EDIT_FORCAST_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(link, forecast, config);
+    console.log(data);
+    dispatch({
+      type: EDIT_FORCAST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: EDIT_FORCAST_FAIL,
+      payload: error.response,
+    });
+  }
+};
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });

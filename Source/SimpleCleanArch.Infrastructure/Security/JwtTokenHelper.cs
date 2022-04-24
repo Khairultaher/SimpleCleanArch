@@ -39,8 +39,10 @@ namespace SimpleCleanArch.Infrastructure.Security
             );
 
             var strJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            return JsonConvert.DeserializeObject<JwtToken>(strJwt);
+            return new JwtToken { 
+                AccessToken = strJwt,   
+                ExpiresAt = DateTime.UtcNow.Add(expiration),
+            };
         }
     }
 }

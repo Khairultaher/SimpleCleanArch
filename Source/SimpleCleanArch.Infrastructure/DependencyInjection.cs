@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SimpleCleanArch.Application.Common.Constants;
 using SimpleCleanArch.Application.Common.Interfaces;
-using SimpleCleanArch.Application.Common.Security;
 using SimpleCleanArch.Infrastructure.Identity;
 using SimpleCleanArch.Infrastructure.Persistence;
 using SimpleCleanArch.Infrastructure.Security;
@@ -70,11 +68,11 @@ public static class DependencyInjection
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidIssuer = Constants.JwtToken.Issuer,
+                ValidIssuer = Constants.JwtSettings.Issuer,
                 ValidateAudience = true,
-                ValidAudience = Constants.JwtToken.Audience,
+                ValidAudience = Constants.JwtSettings.Audience,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.JwtToken.SigningKey))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.JwtSettings.SigningKey))
             };
         });
         #endregion

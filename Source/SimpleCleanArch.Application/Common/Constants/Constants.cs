@@ -25,11 +25,11 @@ namespace SimpleCleanArch.Application.Common.Constants
             public static string FB_Key { get; set; } = "";
         }
 
-        public static class JwtToken
+        public static class JwtSettings
         {
-            public static string Issuer = "";
-            public static string Audience = "";
-            public static string SigningKey = "";
+            public static string Issuer = "localhost";
+            public static string Audience = "localhost";
+            public static string SigningKey = "localhostWith@strongKey";
             public static int TokenTimeoutMinutes = 60;
         }
     }

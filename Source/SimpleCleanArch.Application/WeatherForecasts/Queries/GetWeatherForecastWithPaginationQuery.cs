@@ -29,7 +29,7 @@ namespace SimpleCleanArch.Application.WeatherForecasts.Queries
         public async Task<PaginatedList<WeatherForecastModel>> Handle(GetWeatherForecastWithPaginationQuery request, CancellationToken cancellationToken)
         {
             return await _context.WeatherForecasts
-             .OrderBy(x => x.Id)
+             .OrderByDescending(x => x.Id)
              .ProjectTo<WeatherForecastModel>(_mapper.ConfigurationProvider)
              .PaginatedListAsync(request.PageNumber, request.PageSize);
         }

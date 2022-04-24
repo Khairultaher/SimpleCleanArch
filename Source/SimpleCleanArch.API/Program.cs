@@ -21,9 +21,9 @@ IConfiguration configuration = builder.Configuration;
 #endregion
 
 #region Constants & Variables
-Constants.JwtToken.Issuer = configuration["JwtToken:Issuer"];
-Constants.JwtToken.Audience = configuration["JwtToken:Audience"];
-Constants.JwtToken.SigningKey = configuration["JwtToken:SigningKey"];
+Constants.JwtSettings.Issuer = configuration["JwtSettings:Issuer"];
+Constants.JwtSettings.Audience = configuration["JwtSettings:Audience"];
+Constants.JwtSettings.SigningKey = configuration["JwtSettings:SigningKey"];
 #endregion
 
 // Add services to the container.

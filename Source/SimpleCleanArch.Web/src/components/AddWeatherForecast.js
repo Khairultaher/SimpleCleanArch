@@ -7,6 +7,7 @@ import { useAlert } from "react-alert";
 
 import {
   addForcast,
+  editForcast,
   clearErrors,
 } from "../redux/actions/weatherForcastActions";
 
@@ -18,6 +19,7 @@ import {
 import Loader from "./layout/Loader";
 
 const AddWeatherForecast = (props) => {
+  //console.log(props);
   const [temperatureC, setTemperatureC] = useState(0);
   const [summary, setSummary] = useState("");
 
@@ -29,17 +31,15 @@ const AddWeatherForecast = (props) => {
   );
 
   useEffect(() => {
+    console.log("AddWeatherForecast");
     if (props.show) {
-      showModal();
-    }
-  });
-
-  const showModal = () => {
-    if (props.data) {
       setTemperatureC(props.data.temperatureC);
       setSummary(props.data.summary);
+      showModal();
     }
+  }, [props.show]);
 
+  const showModal = () => {
     const modalEle = modalRef.current;
     const bsModal = new Modal(modalEle, {
       backdrop: "static",
@@ -51,18 +51,29 @@ const AddWeatherForecast = (props) => {
   const hideModal = () => {
     const modalEle = modalRef.current;
     const bsModal = Modal.getInstance(modalEle);
+
+    setTemperatureC(0);
+    setSummary(null);
+
     bsModal.hide();
     props.onCloseModalClick();
   };
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     const formData = new FormData();
     formData.set("id", props.data.id);
     formData.set("temperatureC", temperatureC);
     formData.set("summary", summary);
 
-    console.log(formData);
-    dispatch(addForcast(formData));
+    if (!props.data.id) {
+      await dispatch(addForcast(formData));
+    } else {
+      await dispatch(editForcast(formData));
+    }
+
+    if (success) {
+      hideModal();
+    }
   };
 
   return (
@@ -116,14 +127,14 @@ const AddWeatherForecast = (props) => {
               className="btn btn-secondary"
               onClick={hideModal}
               data-dismiss="modal"
-              disabled={loading ? true : false}
+              disabled={loading}
             >
               Close
             </button>
             <button
               type="button"
               className="btn btn-primary"
-              disabled={loading ? true : false}
+              disabled={loading}
               onClick={submitHandler}
               data-dismiss="modal"
               aria-label="Close"

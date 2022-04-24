@@ -65,22 +65,28 @@ export const addForcastReducer = (state = { forecast: {} }, action) => {
     case ADD_FORCAST_RESET:
       return {
         ...state,
+        loading: false,
         success: false,
       };
     case ADD_FORCAST_FAIL:
       return {
         ...state,
+        loading: false,
         error: action.payload.message,
       };
 
     case CLEAR_ERRORS:
       return {
         ...state,
+        loading: false,
         error: null,
       };
 
     default:
-      return state;
+      return {
+        ...state,
+        loading: false,
+      };
   }
 };
 
@@ -90,17 +96,20 @@ export const editForcastReducer = (state = { forecast: {} }, action) => {
       return {
         ...state,
         loading: true,
+        sucess: false,
       };
 
     case EDIT_FORCAST_SUCCESS:
       return {
         loading: false,
-        success: action.payload.message,
+        success: true,
+        id: action.payload,
       };
 
     case EDIT_FORCAST_FAIL:
       return {
         ...state,
+        success: false,
         error: action.payload.message,
       };
 

@@ -180,7 +180,7 @@ export default class Header extends Component {
               </a>
               <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <div className="dropdown-divider" />
-                <Link to="" className="dropdown-item">
+                <Link to="/logout" className="dropdown-item">
                   <i className="fas fa-sign-out-alt" /> Logout
                 </Link>
               </div>

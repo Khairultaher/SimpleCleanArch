@@ -1,6 +1,6 @@
 import React, { Component, Fragment, useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
-
+import SweetAlert from "sweetalert2-react";
 import AddWeatherForecast from "./AddWeatherForecast";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -17,22 +17,24 @@ const WeatherForecast = ({}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemPerPage, setItemPerPage] = useState(10);
   const [showModal, setShowModal] = useState(false);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({ id: null, temperatureC: 0, summary: "" });
+  const [showConfirmation, setConfirmation] = useState(false);
 
   const alert = useAlert();
   const dispatch = useDispatch();
-
   const { loading, forecasts, error, totalCount } = useSelector(
     (state) => state.allForcast
   );
 
   useEffect(() => {
+    console.log("WeatherForecast");
     if (error) {
-      return alert.error(error);
+      alert.error(error);
+      dispatch(clearErrors());
     }
 
     dispatch(getAllForcast(currentPage, itemPerPage));
-  }, [dispatch, currentPage, alert, error]);
+  }, [currentPage, alert, error]);
 
   function setCurrentPageNo(pageNumber) {
     setCurrentPage(pageNumber);
@@ -43,7 +45,16 @@ const WeatherForecast = ({}) => {
   }
   function onCloseModal() {
     setShowModal(!showModal);
+
+    dispatch(getAllForcast(currentPage, itemPerPage));
   }
+  function onDelete(id) {
+    setConfirmation(true);
+  }
+  function onCancel() {
+    setConfirmation(false);
+  }
+  function onSave() {}
   return (
     <>
       <section className="container-fluid">
@@ -70,14 +81,14 @@ const WeatherForecast = ({}) => {
               <Loader />
             ) : (
               <Fragment>
-                <div class="row float-right">
+                <div className="row float-right">
                   <button
                     type="button"
                     data-toggle="modal"
                     data-target="#myModal"
                     className="btn btn-success btn-sm my-1 mx-2 px-3 float-right"
                     onClick={() => {
-                      showModalDialog(null);
+                      showModalDialog(data);
                     }}
                   >
                     <i className="fas fa-plus"></i> Add
@@ -111,12 +122,21 @@ const WeatherForecast = ({}) => {
                               <a
                                 className="btn mr-1"
                                 onClick={() => {
-                                  showModalDialog(forecast);
+                                  showModalDialog({
+                                    id: forecast.id,
+                                    temperatureC: forecast.temperatureC,
+                                    summary: forecast.summary,
+                                  });
                                 }}
                               >
                                 <i className="fas fa-edit text-success"></i>
                               </a>
-                              <a className="btn">
+                              <a
+                                className="btn"
+                                onClick={() => {
+                                  onDelete(forecast.id);
+                                }}
+                              >
                                 <i className="fas fa-trash-alt text-danger"></i>
                               </a>
                             </div>
@@ -145,11 +165,22 @@ const WeatherForecast = ({}) => {
                   )}
                 </section>
                 <section id="modal">
-                  <AddWeatherForecast
-                    show={showModal}
-                    data={data}
-                    onCloseModalClick={onCloseModal}
-                  ></AddWeatherForecast>
+                  {
+                    <AddWeatherForecast
+                      show={showModal}
+                      data={data}
+                      onSave={onSave}
+                      onCloseModalClick={onCloseModal}
+                    ></AddWeatherForecast>
+                  }
+
+                  {showConfirmation && (
+                    <SweetAlert
+                      title="Demo"
+                      text="SweetAlert in React"
+                      onConfirm={() => {}}
+                    />
+                  )}
                 </section>
               </Fragment>
             )}
