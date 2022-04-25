@@ -1,7 +1,7 @@
 import React, { Component, Fragment, useState, useEffect, useRef } from "react";
-import { createHashHistory } from "history";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
+import { useNavigate } from "react-router-dom";
 
 import Loader from "../layout/Loader";
 
@@ -11,7 +11,7 @@ const Logout = ({ props }) => {
   const [userName, setUserName] = useState();
   const [password, setPassword] = useState();
 
-  const history = createHashHistory();
+  const navigate = useNavigate();
 
   const alert = useAlert();
   const dispatch = useDispatch();
@@ -21,16 +21,16 @@ const Logout = ({ props }) => {
 
   useEffect(() => {
     console.log("logout");
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-    console.log(isAuthenticated);
+    // if (error) {
+    //   alert.error(error);
+    //   dispatch(clearErrors());
+    // }
     if (isAuthenticated) {
       dispatch(logout());
+    } else {
+      navigate("/");
     }
-    history.go("/login");
-  }, []);
+  }, [dispatch, isAuthenticated]);
 
   return <Fragment>{loading ? <Loader /> : <Fragment></Fragment>}</Fragment>;
 };

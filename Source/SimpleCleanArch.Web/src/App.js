@@ -10,6 +10,7 @@ import Dashboard from "./components/Dashboard";
 import WeatherForecast from "./components/WeatherForecast";
 import Login from "./components/auth/Login";
 import Logout from "./components/auth/Logout";
+import ProtectedRoute from "./components/route/ProtectedRoute";
 
 function App() {
   const { loading, isAuthenticated, user, error } = useSelector(
@@ -17,27 +18,36 @@ function App() {
   );
   return (
     <div className="wrapper">
-      {isAuthenticated && (
-        <BrowserRouter>
-          <Header />
-          <Menu />
-          <section className="content-wrapper">
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/weatherforecast" element={<WeatherForecast />} />
-              <Route path="/logout" element={<Logout />} />
-            </Routes>
-          </section>
-          <Footer />
-        </BrowserRouter>
-      )}
-      {!isAuthenticated && (
-        <BrowserRouter>
+      <BrowserRouter>
+        {isAuthenticated && (
+          <>
+            <Header />
+            <Menu />
+          </>
+        )}
+        <section className={isAuthenticated ? "content-wrapper" : ""}>
           <Routes>
+            <Route
+              path="/"
+              element={<ProtectedRoute Component={Dashboard} />}
+            />
+            <Route
+              path="/dashboard"
+              element={<ProtectedRoute Component={Dashboard} />}
+            />
+            <Route
+              path="/weatherforecast"
+              element={<ProtectedRoute Component={WeatherForecast} />}
+            />
             <Route path="/login" element={<Login />} />
+            <Route
+              path="/logout"
+              element={<ProtectedRoute Component={Logout} />}
+            />
           </Routes>
-        </BrowserRouter>
-      )}
+        </section>
+        {isAuthenticated && <Footer />}
+      </BrowserRouter>
     </div>
   );
 }
