@@ -94,6 +94,31 @@ export const editForcast = (forecast) => async (dispatch) => {
     });
   }
 };
+export const deleteForcast = (id) => async (dispatch) => {
+  let link = `${config.API_BASE_URL}/api/weatherforecast?id=${id}`;
+  try {
+    dispatch({ type: DELETE_FORCAST_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.delete(link, config);
+
+    dispatch({
+      type: DELETE_FORCAST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: DELETE_FORCAST_FAIL,
+      payload: error.response,
+    });
+  }
+};
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });

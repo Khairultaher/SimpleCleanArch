@@ -26,12 +26,13 @@ export const login = (userName, password) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post(link, user, config);
-    console.log(data);
+    const res = await axios.post(link, user, config);
+    localStorage.setItem("access_token", res.data.token.accessToken);
+    localStorage.setItem("expires_at", res.data.token.expiresAt);
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: data.data,
+      payload: res.data,
     });
   } catch (error) {
     console.log(error);
@@ -55,7 +56,10 @@ export const logout = () => async (dispatch) => {
     // };
 
     // const { data } = await axios.post(link, loginModel, config);
-    console.log(LOGOUT_REQUEST);
+
+    //localStorage.removeItem("access_token");
+    //localStorage.removeItem("expires_at");
+
     dispatch({
       type: LOGOUT_SUCCESS,
       payload: null,

@@ -1,5 +1,6 @@
 import {
   LOGIN_REQUEST,
+  LOGIN_REFRESH,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT_REQUEST,
@@ -15,13 +16,23 @@ export const authReducer = (state = { user: {} }, action) => {
         ...state,
         isAuthenticated: false,
         user: null,
+        token: null,
+        roles: null,
+        loading: true,
+      };
+    case LOGIN_REFRESH:
+      return {
+        ...state,
+        isAuthenticated: true,
         loading: true,
       };
     case LOGIN_SUCCESS:
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload,
+        user: action.payload.userName,
+        token: action.payload.token,
+        roles: action.payload.roles,
         loading: false,
       };
     case LOGIN_FAIL:
@@ -29,6 +40,8 @@ export const authReducer = (state = { user: {} }, action) => {
         ...state,
         isAuthenticated: false,
         user: null,
+        token: null,
+        roles: null,
         loading: false,
       };
     case LOGOUT_REQUEST:
@@ -42,6 +55,8 @@ export const authReducer = (state = { user: {} }, action) => {
         loading: false,
         isAuthenticated: false,
         user: null,
+        token: null,
+        roles: null,
       };
     case LOGOUT_FAIL:
       return {
@@ -58,6 +73,11 @@ export const authReducer = (state = { user: {} }, action) => {
       return {
         ...state,
         loading: false,
+        isAuthenticated: false,
+        user: null,
+        token: null,
+        roles: null,
+        error: null,
       };
   }
 };

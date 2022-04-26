@@ -1,6 +1,6 @@
 import React, { Component, Fragment, useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
-import SweetAlert from "sweetalert2-react";
+import Swal from "sweetalert2";
 import AddWeatherForecast from "./AddWeatherForecast";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -8,21 +8,23 @@ import { useAlert } from "react-alert";
 
 import {
   getAllForcast,
+  deleteForcast,
   clearErrors,
-} from "../redux/actions/weatherForcastActions";
+} from "../../redux/actions/weatherForcastActions";
 
-import Loader from "./layout/Loader";
+import Loader from "../layout/Loader";
 
 const WeatherForecast = ({}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemPerPage, setItemPerPage] = useState(10);
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState({ id: null, temperatureC: 0, summary: "" });
-  const [showConfirmation, setConfirmation] = useState(false);
+  const [onDeleteConfirmation, setOnDeleteConfirmation] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const alert = useAlert();
   const dispatch = useDispatch();
-  const { loading, forecasts, error, totalCount } = useSelector(
+  const { loading, forecasts, success, error, totalCount } = useSelector(
     (state) => state.allForcast
   );
 
@@ -34,7 +36,7 @@ const WeatherForecast = ({}) => {
     }
 
     dispatch(getAllForcast(currentPage, itemPerPage));
-  }, [currentPage, alert, error]);
+  }, [dispatch, currentPage, alert, error]);
 
   function setCurrentPageNo(pageNumber) {
     setCurrentPage(pageNumber);
@@ -48,11 +50,32 @@ const WeatherForecast = ({}) => {
 
     dispatch(getAllForcast(currentPage, itemPerPage));
   }
-  function onDelete(id) {
-    setConfirmation(true);
+  function onDeleteRequest(id) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onDeleteConfirm(id);
+      }
+    });
   }
-  function onCancel() {
-    setConfirmation(false);
+  async function onDeleteConfirm(id) {
+    await dispatch(deleteForcast(id));
+
+    if (success) {
+      Swal.fire("Deleted!", "Your file has been deleted.", "success");
+    }
+    dispatch(getAllForcast(currentPage, itemPerPage));
+  }
+  function onDeleteCancel() {
+    setItemToDelete(null);
+    setOnDeleteConfirmation(false);
   }
   function onSave() {}
   return (
@@ -134,7 +157,7 @@ const WeatherForecast = ({}) => {
                               <a
                                 className="btn"
                                 onClick={() => {
-                                  onDelete(forecast.id);
+                                  onDeleteRequest(forecast.id);
                                 }}
                               >
                                 <i className="fas fa-trash-alt text-danger"></i>
@@ -173,14 +196,6 @@ const WeatherForecast = ({}) => {
                       onCloseModalClick={onCloseModal}
                     ></AddWeatherForecast>
                   }
-
-                  {showConfirmation && (
-                    <SweetAlert
-                      title="Demo"
-                      text="SweetAlert in React"
-                      onConfirm={() => {}}
-                    />
-                  )}
                 </section>
               </Fragment>
             )}

@@ -1,36 +1,48 @@
-import React, { Component, Fragment, useState, useEffect, useRef } from "react";
-import { Redirect } from "react-router";
+import React, {
+  Component,
+  Fragment,
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+} from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
-import { createHashHistory } from "history";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Loader from "../layout/Loader";
 import MetaData from "../layout/MetaData";
 import { useNavigate } from "react-router-dom";
 import { login, clearErrors } from "../../redux/actions/authActions";
+import useAuth from "../../hooks/useAuth";
 
 const Login = ({}) => {
+  const { setAuth } = useAuth();
+
   const [userName, setUserName] = useState();
   const [password, setPassword] = useState();
-  const history = createHashHistory();
+
   const alert = useAlert();
   const dispatch = useDispatch();
-  const { loading, isAuthenticated, user, error } = useSelector(
+  const { loading, isAuthenticated, user, roles, token, error } = useSelector(
     (state) => state.auth
   );
 
   const navigate = useNavigate();
-  //const redirect = location.search ? location.search.split("=")[1] : "/";
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   useEffect(() => {
-    console.log("login");
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
     }
+
     if (isAuthenticated) {
-      navigate("/");
+      setAuth({ isAuthenticated, user, roles, token });
+      navigate(from, { replace: true });
     }
-  }, [dispatch, isAuthenticated]);
+  }, [isAuthenticated]);
 
   const submitHandler = async (e) => {
     e.preventDefault();

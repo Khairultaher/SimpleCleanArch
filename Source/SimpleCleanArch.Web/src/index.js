@@ -1,11 +1,10 @@
 import React, { StrictMode } from "react";
-//import { BrowserRouter } from 'react-router-dom';
-//import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./redux/store";
-
+import store, { Persistor } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { AuthProvider } from "./context/AuthProvider";
 import { positions, transitions, Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 
@@ -24,13 +23,19 @@ const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
 root.render(
-  <Provider store={store}>
-    <AlertProvider template={AlertTemplate} {...options}>
-      <StrictMode>
-        <App />
-      </StrictMode>
-    </AlertProvider>
-  </Provider>
+  <StrictMode>
+    <BrowserRouter>
+      <Provider store={store}>
+        <AuthProvider>
+          <AlertProvider template={AlertTemplate} {...options}>
+            <Routes>
+              <Route path="/*" element={<App />} />
+            </Routes>
+          </AlertProvider>
+        </AuthProvider>
+      </Provider>
+    </BrowserRouter>
+  </StrictMode>
 );
 
 reportWebVitals();

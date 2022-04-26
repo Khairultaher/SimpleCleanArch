@@ -60,13 +60,10 @@ namespace SimpleCleanArch.API.Controllers
                     Constants.JwtSettings.Audience,
                     TimeSpan.FromMinutes(Constants.JwtSettings.TokenTimeoutMinutes),
                     claims.ToArray());
-
-                response.Data = new { UserName = user.UserName, token = token };
-                return Ok(response );
+                return Ok(new { UserName = user.UserName, roles = user.Roles, token = token });
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.GetExceptions());
             }
         }

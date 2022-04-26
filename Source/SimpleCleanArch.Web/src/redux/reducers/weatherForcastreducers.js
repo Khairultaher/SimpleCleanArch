@@ -37,6 +37,25 @@ export const allForcastReducer = (state = { forecasts: [] }, action) => {
         error: action.payload.message,
       };
 
+    case DELETE_FORCAST_REQUEST:
+      return {
+        ...state,
+      };
+
+    case DELETE_FORCAST_SUCCESS:
+      return {
+        ...state,
+        success: true,
+        payload: action.payload.message,
+      };
+
+    case DELETE_FORCAST_FAIL:
+      return {
+        ...state,
+        success: false,
+        error: action.payload.message,
+      };
+
     case CLEAR_ERRORS:
       return {
         ...state,
@@ -74,7 +93,6 @@ export const addForcastReducer = (state = { forecast: {} }, action) => {
         loading: false,
         error: action.payload.message,
       };
-
     case CLEAR_ERRORS:
       return {
         ...state,
@@ -110,37 +128,6 @@ export const editForcastReducer = (state = { forecast: {} }, action) => {
       return {
         ...state,
         success: false,
-        error: action.payload.message,
-      };
-
-    case CLEAR_ERRORS:
-      return {
-        ...state,
-        error: null,
-      };
-
-    default:
-      return state;
-  }
-};
-
-export const deleteForcastReducer = (state = { forecast: {} }, action) => {
-  switch (action.type) {
-    case DELETE_FORCAST_REQUEST:
-      return {
-        ...state,
-        loading: true,
-      };
-
-    case DELETE_FORCAST_SUCCESS:
-      return {
-        loading: false,
-        success: action.payload.message,
-      };
-
-    case DELETE_FORCAST_FAIL:
-      return {
-        ...state,
         error: action.payload.message,
       };
 

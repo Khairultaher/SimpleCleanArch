@@ -9,14 +9,14 @@ import {
   addForcast,
   editForcast,
   clearErrors,
-} from "../redux/actions/weatherForcastActions";
+} from "../../redux/actions/weatherForcastActions";
 
 import {
   ADD_FORCAST_RESET,
   CLEAR_ERRORS,
-} from "../redux/constants/weatherForcastConstants";
+} from "../../redux/constants/weatherForcastConstants";
 
-import Loader from "./layout/Loader";
+import Loader from "../layout/Loader";
 
 const AddWeatherForecast = (props) => {
   //console.log(props);

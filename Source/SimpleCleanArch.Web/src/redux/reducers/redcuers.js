@@ -13,7 +13,6 @@ const reducer = combineReducers({
   allForcast: allForcastReducer,
   addForcast: addForcastReducer,
   editForcast: editForcastReducer,
-  deleteForcast: deleteForcastReducer,
   auth: authReducer,
 });
 

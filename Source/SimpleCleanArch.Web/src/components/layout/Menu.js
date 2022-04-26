@@ -84,13 +84,13 @@ export default class Menu extends Component {
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a href="pages/widgets.html" className="nav-link">
+                  <NavLink to="/test" className="nav-link">
                     <i className="nav-icon fas fa-th" />
                     <p>
-                      Widgets
+                      Test page
                       <span className="right badge badge-danger">New</span>
                     </p>
-                  </a>
+                  </NavLink>
                 </li>
                 <li className="nav-item has-treeview">
                   <a href="#" className="nav-link">

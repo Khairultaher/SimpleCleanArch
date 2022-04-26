@@ -61,27 +61,26 @@ namespace SimpleCleanArch.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create([FromForm] CreateWeatherForecastCommand command)
+        public async Task<IActionResult> Create([FromForm] CreateWeatherForecastCommand command)
         {
             try
-            {          
-               return await Mediator.Send(command);
+            {
+                return Ok(await Mediator.Send(command));
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.GetExceptions());
             }
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update([FromForm] UpdateWeatherForecastCommand command)
+        public async Task<IActionResult> Update([FromForm] UpdateWeatherForecastCommand command)
         {
             try
             {
                 await Mediator.Send(command);
-
-                return NoContent();
+                response.Message = "Item updated successfully";
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -93,13 +92,13 @@ namespace SimpleCleanArch.API.Controllers
 
         //[HttpDelete("{id}")]
         [HttpDelete]
-        public async Task<ActionResult> Delete([FromQuery] int id)
+        public async Task<IActionResult> Delete([FromQuery] int id)
         {
             try
             {
                 await Mediator.Send(new DeleteWeatherForecastCommand { Id = id });
-
-                return NoContent();
+                response.Message = "Item deleted successfully";
+                return Ok(response);
             }
             catch (Exception ex)
             {
