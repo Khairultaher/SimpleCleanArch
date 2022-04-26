@@ -41,19 +41,21 @@ public static class DependencyInjection
             .AddRoles<ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
-        services.AddIdentityServer()
-            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-        services.AddTransient<IIdentityService, IdentityService>();
+        //services.AddIdentityServer()
+        //    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+
+        //services.AddTransient<IIdentityService, IdentityService>();
+        //services.AddAuthentication().AddIdentityServerJwt();
 
         services.AddTransient<IJwtTokenHelper, JwtTokenHelper>();
         //services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
 
-        services.AddAuthentication().AddIdentityServerJwt();
+
 
         //hosted services
         services.AddHostedService<DatabaseSeedingService>();
-        //services.AddTransient<ApplicationDbContextSeed>();
+        services.AddTransient<ApplicationDbContextSeed>();
 
         #region Configure Token Based Authentication 
 
@@ -80,8 +82,9 @@ public static class DependencyInjection
         #region Configure Authorization with Policy
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("HRAdmin", policy => policy.RequireClaim("Depertment", "HR")
-                                                      .RequireRole("Admin"));
+            options.AddPolicy("Admin", policy => policy
+                    .RequireRole("Admin")
+                    .RequireClaim("Department", "IT"));
 
             options.AddPolicy("AccountsAdmin", policy => policy.RequireClaim("Depertment", "Accounts")
                                                      .RequireRole("Admin"));

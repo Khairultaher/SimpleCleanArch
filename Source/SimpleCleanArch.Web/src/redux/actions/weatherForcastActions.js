@@ -22,7 +22,7 @@ export const getAllForcast =
   (pageNumber = 1, pageSize = 10) =>
   async (dispatch) => {
     let link = `${config.API_BASE_URL}/api/weatherforecast?pageNumber=${pageNumber}&pageSize=${pageSize}`;
-    console.log(`getAllForcast: ${link}`);
+
     try {
       dispatch({ type: GET_ALL_FORCAST_REQUEST });
 
@@ -33,7 +33,6 @@ export const getAllForcast =
         payload: data,
       });
     } catch (error) {
-      console.log(error);
       dispatch({
         type: GET_ALL_FORCAST_FAIL,
         payload: error.response.data.message,
@@ -54,13 +53,12 @@ export const addForcast = (forecast) => async (dispatch) => {
     };
 
     const { data } = await axios.post(link, forecast, config);
-    console.log(data);
+
     dispatch({
       type: ADD_FORCAST_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: ADD_FORCAST_FAIL,
       payload: error.response.data.message,
@@ -81,13 +79,12 @@ export const editForcast = (forecast) => async (dispatch) => {
     };
 
     const { data } = await axios.put(link, forecast, config);
-    console.log(data);
+
     dispatch({
       type: EDIT_FORCAST_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: EDIT_FORCAST_FAIL,
       payload: error.response,
@@ -112,7 +109,6 @@ export const deleteForcast = (id) => async (dispatch) => {
       payload: data,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: DELETE_FORCAST_FAIL,
       payload: error.response,

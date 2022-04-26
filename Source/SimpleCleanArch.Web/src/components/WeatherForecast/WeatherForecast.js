@@ -29,7 +29,6 @@ const WeatherForecast = ({}) => {
   );
 
   useEffect(() => {
-    console.log("WeatherForecast");
     if (error) {
       alert.error(error);
       dispatch(clearErrors());

@@ -1,4 +1,5 @@
 ﻿using Duende.IdentityServer.EntityFramework.Options;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SimpleCleanArch.Application.Common;
@@ -11,7 +12,8 @@ using System.Reflection;
 namespace SimpleCleanArch.Infrastructure.Persistence;
 
 public class ApplicationDbContext
-    : AuthorizationDbContext<ApplicationUser, ApplicationRole, string>
+    //: AuthorizationDbContext<ApplicationUser, ApplicationRole, string>
+    : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     , IApplicationDbContext
 {
     private readonly ICurrentUserService _currentUserService;
@@ -21,7 +23,7 @@ public class ApplicationDbContext
         DbContextOptions<ApplicationDbContext> options,
         IOptions<OperationalStoreOptions> operationalStoreOptions,
         ICurrentUserService currentUserService,
-        IDomainEventService domainEventService) : base(options, operationalStoreOptions)
+        IDomainEventService domainEventService) : base(options)
     {
         _currentUserService = currentUserService;
         _domainEventService = domainEventService;

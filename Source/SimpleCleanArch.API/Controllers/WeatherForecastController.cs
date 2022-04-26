@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleCleanArch.Application.Common.Extensions;
 using SimpleCleanArch.Application.Common.Models;
@@ -22,6 +23,7 @@ namespace SimpleCleanArch.API.Controllers
 
         [HttpGet]
         [Route("GetWeatherForecast")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int skip = 1, int take = 10)
         {
             try
@@ -48,6 +50,8 @@ namespace SimpleCleanArch.API.Controllers
         }
 
         [HttpGet]
+        //[Authorize(Roles = "Admin")]
+        [Authorize(policy: "Admin")]
         public async Task<ActionResult<PaginatedList<WeatherForecastModel>>> GetWeatherForecastWithPagination([FromQuery] GetWeatherForecastWithPaginationQuery query)
         {
             try

@@ -7,6 +7,7 @@ using SimpleCleanArch.Infrastructure.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -63,12 +64,17 @@ public class DatabaseSeedingService : IHostedService
 
         }
 
-        var administrator = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = "admin@localhost", Email = "admin@localhost" };
+        var administrator = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = "admin", Email = "admin@localhost" };
 
+        var claims = new List<Claim> {
+            new Claim("Department", "IT"),
+            new Claim("Designation", "Software Engineer")
+        };
         if (userManager.Users.All(u => u.UserName != administrator.UserName))
         {
             var res = await userManager.CreateAsync(administrator, "Qwe@1234");
             await userManager.AddToRolesAsync(administrator, roles.Select(s => s.Name).ToList());
+            await userManager.AddClaimsAsync(administrator, claims);
         }
     }
 

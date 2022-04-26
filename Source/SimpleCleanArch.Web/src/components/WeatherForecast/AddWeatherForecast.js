@@ -19,7 +19,6 @@ import {
 import Loader from "../layout/Loader";
 
 const AddWeatherForecast = (props) => {
-  //console.log(props);
   const [temperatureC, setTemperatureC] = useState(0);
   const [summary, setSummary] = useState("");
 
@@ -31,7 +30,6 @@ const AddWeatherForecast = (props) => {
   );
 
   useEffect(() => {
-    console.log("AddWeatherForecast");
     if (props.show) {
       setTemperatureC(props.data.temperatureC);
       setSummary(props.data.summary);

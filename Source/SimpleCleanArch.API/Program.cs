@@ -63,9 +63,19 @@ if (app.Environment.IsDevelopment())
 app.UseCors("cors");
 
 app.UseHttpsRedirection();
+app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGet("/", async context =>
+    {
+        await context.Response.WriteAsync("Yes, I am on...");
+    });
+});
 
 app.Run();
