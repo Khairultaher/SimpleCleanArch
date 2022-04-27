@@ -9,15 +9,14 @@ import React, {
 
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Loader from "../layout/Loader";
 import MetaData from "../layout/MetaData";
-import { useNavigate } from "react-router-dom";
 import { login, clearErrors } from "../../redux/actions/authActions";
 import useAuth from "../../hooks/useAuth";
 
 const Login = ({}) => {
-  const { setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
 
   const [userLoginName, setUserLoginName] = useState();
   const [password, setPassword] = useState();
@@ -39,6 +38,7 @@ const Login = ({}) => {
 
     if (isAuthenticated) {
       setAuth({ isAuthenticated, userName, roles, claims, token });
+      localStorage.setItem("persist", true);
       navigate(from, { replace: true });
     }
   }, [isAuthenticated]);
@@ -50,6 +50,14 @@ const Login = ({}) => {
       await dispatch(login(userLoginName, password));
     }
   };
+
+  // const togglePersist = () => {
+  //   setPersist((prev) => !prev);
+  // };
+
+  // useEffect(() => {
+  //   localStorage.setItem("persist", persist);
+  // }, [persist]);
 
   return (
     <Fragment>

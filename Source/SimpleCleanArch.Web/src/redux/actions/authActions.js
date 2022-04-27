@@ -27,9 +27,7 @@ export const login = (userName, password) => async (dispatch) => {
     };
 
     const res = await axios.post(link, user, config);
-    //window.localStorage.removeItem("token");
-    //window.localStorage.setItem("token", JSON.stringify(res.data.token));
-
+    window.localStorage.setItem("token", JSON.stringify(res.data.token));
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,

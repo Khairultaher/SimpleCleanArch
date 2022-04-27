@@ -14,6 +14,7 @@ import Logout from "./components/auth/Logout";
 import Missing from "./components/Missing";
 import Test from "./components/Test";
 import Unauthorized from "./components/auth/Unauthorized";
+import PersistLogin from "./components/auth/PersistLogin";
 
 import "./App.css";
 
@@ -39,17 +40,20 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/Logout" element={<Logout />} />
 
-            {/*protected routes*/}
-            <Route
-              element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Admin]} />}
-            >
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/WeatherForecast" element={<WeatherForecast />} />
+            {/*Protected routes & Persist login*/}
+            <Route element={<PersistLogin />}>
+              <Route
+                element={
+                  <RequireAuth allowedRoles={[ROLES.User, ROLES.Admin]} />
+                }
+              >
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/WeatherForecast" element={<WeatherForecast />} />
+              </Route>
+              <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+                <Route path="/Test" element={<Test />} />
+              </Route>
             </Route>
-            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-              <Route path="/Test" element={<Test />} />
-            </Route>
-
             {/*catch all*/}
             <Route path="/Missing" element={<Missing />} />
             <Route path="/unauthorized" element={<Unauthorized />} />

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SimpleCleanArch.API.ViewModels;
@@ -94,10 +95,25 @@ namespace SimpleCleanArch.API.Controllers
 
         [HttpPost]
         [Route("Logout")]
-        public async Task<IActionResult> Logout()
+        //[Authorize]
+        public async Task<IActionResult> Logout(string userName)
         {
-            await HttpContext.SignOutAsync("Cookies");
-            return Ok(response);
+            try
+            {
+                var user = await _userManager.FindByNameAsync(userName);
+                user.RefreshToken = null;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(0);
+
+                var res = await _userManager.UpdateAsync(user);
+                if (!res.Succeeded) return BadRequest("Unable to logout!");
+                //await HttpContext.SignOutAsync("Cookies");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.GetExceptions());
+            }
         }
     }
 }
