@@ -1,6 +1,6 @@
 import axios from "axios";
 import config from "../../config.json";
-import useAuth from "../../hooks/useAuth";
+
 import {
   GET_ALL_FORCAST_REQUEST,
   GET_ALL_FORCAST_SUCCESS,
