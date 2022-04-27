@@ -19,14 +19,13 @@ import useAuth from "../../hooks/useAuth";
 const Login = ({}) => {
   const { setAuth } = useAuth();
 
-  const [userName, setUserName] = useState();
+  const [userLoginName, setUserLoginName] = useState();
   const [password, setPassword] = useState();
 
   const alert = useAlert();
   const dispatch = useDispatch();
-  const { loading, isAuthenticated, user, roles, token, error } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, isAuthenticated, userName, roles, claims, token, error } =
+    useSelector((state) => state.auth);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,7 +38,7 @@ const Login = ({}) => {
     }
 
     if (isAuthenticated) {
-      setAuth({ isAuthenticated, user, roles, token });
+      setAuth({ isAuthenticated, userName, roles, claims, token });
       navigate(from, { replace: true });
     }
   }, [isAuthenticated]);
@@ -48,7 +47,7 @@ const Login = ({}) => {
     e.preventDefault();
 
     if (!isAuthenticated) {
-      await dispatch(login(userName, password));
+      await dispatch(login(userLoginName, password));
     }
   };
 
@@ -75,8 +74,8 @@ const Login = ({}) => {
                     type="text"
                     id="userName"
                     className="form-control"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
+                    value={userLoginName}
+                    onChange={(e) => setUserLoginName(e.target.value)}
                   />
                 </div>
 

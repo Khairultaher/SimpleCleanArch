@@ -15,9 +15,10 @@ export const authReducer = (state = { user: {} }, action) => {
       return {
         ...state,
         isAuthenticated: false,
-        user: null,
+        userName: null,
         token: null,
         roles: null,
+        claims: null,
         loading: true,
       };
     case LOGIN_REFRESH:
@@ -30,9 +31,10 @@ export const authReducer = (state = { user: {} }, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.userName,
+        userName: action.payload.userName,
         token: action.payload.token,
         roles: action.payload.roles,
+        claims: action.payload.claims,
         loading: false,
       };
     case LOGIN_FAIL:
@@ -42,6 +44,7 @@ export const authReducer = (state = { user: {} }, action) => {
         user: null,
         token: null,
         roles: null,
+        claims: null,
         loading: false,
       };
     case LOGOUT_REQUEST:
@@ -57,6 +60,7 @@ export const authReducer = (state = { user: {} }, action) => {
         user: null,
         token: null,
         roles: null,
+        claims: null,
       };
     case LOGOUT_FAIL:
       return {
@@ -77,6 +81,7 @@ export const authReducer = (state = { user: {} }, action) => {
         user: null,
         token: null,
         roles: null,
+        claims: null,
         error: null,
       };
   }

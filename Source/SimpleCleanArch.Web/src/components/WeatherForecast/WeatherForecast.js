@@ -5,7 +5,7 @@ import AddWeatherForecast from "./AddWeatherForecast";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
-
+import useAuth from "../../hooks/useAuth";
 import {
   getAllForcast,
   deleteForcast,
@@ -27,6 +27,7 @@ const WeatherForecast = ({}) => {
   const { loading, forecasts, success, error, totalCount } = useSelector(
     (state) => state.allForcast
   );
+  const { auth, setAuth } = useAuth();
 
   useEffect(() => {
     if (error) {
@@ -34,7 +35,7 @@ const WeatherForecast = ({}) => {
       dispatch(clearErrors());
     }
 
-    dispatch(getAllForcast(currentPage, itemPerPage));
+    dispatch(getAllForcast(currentPage, itemPerPage, auth.token.accessToken));
   }, [dispatch, currentPage, alert, error]);
 
   function setCurrentPageNo(pageNumber) {
@@ -47,7 +48,7 @@ const WeatherForecast = ({}) => {
   function onCloseModal() {
     setShowModal(!showModal);
 
-    dispatch(getAllForcast(currentPage, itemPerPage));
+    dispatch(getAllForcast(currentPage, itemPerPage, auth.token.accessToken));
   }
   function onDeleteRequest(id) {
     Swal.fire({

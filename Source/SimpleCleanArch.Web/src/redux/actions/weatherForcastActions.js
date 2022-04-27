@@ -1,6 +1,6 @@
 import axios from "axios";
 import config from "../../config.json";
-
+import useAuth from "../../hooks/useAuth";
 import {
   GET_ALL_FORCAST_REQUEST,
   GET_ALL_FORCAST_SUCCESS,
@@ -19,14 +19,20 @@ import {
 
 // Get all forecast
 export const getAllForcast =
-  (pageNumber = 1, pageSize = 10) =>
+  (pageNumber = 1, pageSize = 10, token) =>
   async (dispatch) => {
     let link = `${config.API_BASE_URL}/api/weatherforecast?pageNumber=${pageNumber}&pageSize=${pageSize}`;
 
     try {
       dispatch({ type: GET_ALL_FORCAST_REQUEST });
 
-      const { data } = await axios.get(link);
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(link, config);
 
       dispatch({
         type: GET_ALL_FORCAST_SUCCESS,
@@ -43,12 +49,14 @@ export const getAllForcast =
 // add forecast
 export const addForcast = (forecast) => async (dispatch) => {
   let link = `${config.API_BASE_URL}/api/weatherforecast`;
+  const token = JSON.parse(window.localStorage.getItem("token"));
   try {
     dispatch({ type: ADD_FORCAST_REQUEST });
 
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token.accessToken}`,
       },
     };
 

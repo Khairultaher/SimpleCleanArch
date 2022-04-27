@@ -27,8 +27,8 @@ export const login = (userName, password) => async (dispatch) => {
     };
 
     const res = await axios.post(link, user, config);
-    localStorage.setItem("access_token", res.data.token.accessToken);
-    localStorage.setItem("expires_at", res.data.token.expiresAt);
+    //window.localStorage.removeItem("token");
+    //window.localStorage.setItem("token", JSON.stringify(res.data.token));
 
     dispatch({
       type: LOGIN_SUCCESS,

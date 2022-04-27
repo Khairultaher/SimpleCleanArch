@@ -80,7 +80,9 @@ namespace SimpleCleanArch.API.Controllers
 
                 // this need to be saved in database
                 user.RefreshToken = token.RefreshToken;
-                user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Constants.JwtSettings.RefreshTokenExpiryMinutes);
+
+                var res = await _userManager.UpdateAsync(user);
 
                 return Ok(new { UserName = user.UserName, roles = userRoles, claims = userClaims, token = token });
             }

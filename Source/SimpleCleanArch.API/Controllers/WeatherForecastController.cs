@@ -50,7 +50,6 @@ namespace SimpleCleanArch.API.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
         [Authorize(policy: "Admin")]
         public async Task<ActionResult<PaginatedList<WeatherForecastModel>>> GetWeatherForecastWithPagination([FromQuery] GetWeatherForecastWithPaginationQuery query)
         {

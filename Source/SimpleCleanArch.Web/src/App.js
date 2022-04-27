@@ -46,7 +46,7 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/WeatherForecast" element={<WeatherForecast />} />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[ROLES.Editor]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
               <Route path="/Test" element={<Test />} />
             </Route>
 

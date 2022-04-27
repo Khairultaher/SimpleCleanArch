@@ -30,7 +30,8 @@ namespace SimpleCleanArch.Application.Common.Constants
             public static string Issuer = "localhost";
             public static string Audience = "localhost";
             public static string SigningKey = "localhostWith@strongKey";
-            public static int TokenTimeoutMinutes = 60;
+            public static int TokenTimeoutMinutes = 5;
+            public static int RefreshTokenExpiryMinutes = 60;
         }
     }
 }
